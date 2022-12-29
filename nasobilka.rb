@@ -20,8 +20,8 @@ rescue ArgumentError, TypeError, NotInRange
   exit!
 end
 
-NUMBERS = (2..10).to_a
-BIG_NUMBERS = (10..100).to_a
+NUMBERS = (2..9).to_a
+BIG_NUMBERS = (11..99).to_a
 
 puts "\n===========================================\n"
 
@@ -39,7 +39,7 @@ example_count.times do
   when 1
     b = NUMBERS.sample
   when 2
-    b = BIG_NUMBERS.sample
+    b = (NUMBERS+BIG_NUMBERS).flatten.sample
   end
 
   total = a * b
@@ -80,9 +80,9 @@ else
 end
 
 puts "\nZískal\a jsi #{score} #{score_cz} z #{example_count}."
-puts "Jeden příklad ti průměrně trval #{duration} vteřin."
+puts "Jeden příklad ti průměrně trval #{duration.to_i} vteřin(y)."
 puts "Máš to za #{grade}."
 
-puts "\n===========================================\n"
+puts "\n===========================================\n\n"
 puts "Konec programu. Uč se pilně a klidně omylně."
 puts "\n===========================================\n"
