@@ -83,14 +83,21 @@ post '/check/:type' do |type|
   case type
   when 1
     begin
-      user_num, user_denom = params[:answer].split('/').map(&:to_i)
+      user_num = params[:numerator].to_i
+      user_denom = params[:denominator].to_i
+      numerator = params[:numerator_orig].to_i
+      denominator = params[:denominator_orig].to_i
       a = params[:a].to_i
       b = params[:b].to_i
-      correct = (user_num.to_f/user_denom == a.to_f/b)
-      reduced_a, reduced_b = reduce_fraction(a, b)
+      
+      # Kontrola, zda je zlomek správně zkrácený a má stejnou hodnotu
+      correct = (user_num.to_f/user_denom == a.to_f/b) && 
+                reduce_fraction(user_num, user_denom) == [user_num, user_denom]
+                
+      reduced_a, reduced_b = reduce_fraction(numerator, denominator)
       example = {
-        question: "#{params[:numerator]}/#{params[:denominator]}",
-        user_answer: params[:answer],
+        question: "#{numerator}/#{denominator}",
+        user_answer: "#{user_num}/#{user_denom}",
         correct_answer: "#{reduced_a}/#{reduced_b}",
         correct: correct,
         fraction_value: a.to_f/b,
@@ -146,9 +153,9 @@ post '/check/:type' do |type|
     }
   when 4
     begin
-      whole, fraction = params[:answer].split(' ')
-      user_num, user_denom = fraction.split('/').map(&:to_i)
-      whole = whole.to_i
+      whole = params[:whole].to_i
+      user_num = params[:numerator].to_i
+      user_denom = params[:denominator].to_i
       a = params[:a].to_i
       b = params[:b].to_i
       correct = ((whole + user_num.to_f/user_denom) == a.to_f/b)
@@ -314,6 +321,18 @@ __END__
         margin: 10px 0;
       }
     }
+    .fraction-input, .mixed-number-input {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 10px 0;
+    }
+    .fraction-input input, .mixed-number-input input {
+      width: 80px;
+    }
+    .mixed-number-input input:first-child {
+      width: 60px;
+    }
   </style>
 </head>
 <body>
@@ -373,18 +392,21 @@ __END__
   <form action="/check/<%= @type %>" method="post">
     <% case @type %>
     <% when 1 %>
-      <input type="text" name="answer" placeholder="čitatel/jmenovatel" required inputmode="text" autocomplete="off" spellcheck="false">
+      <div class="fraction-input">
+        <input type="text" name="numerator" inputmode="numeric" placeholder="čitatel" required autocomplete="off">
+        <span>/</span>
+        <input type="text" name="denominator" inputmode="numeric" placeholder="jmenovatel" required autocomplete="off">
+      </div>
+      <input type="hidden" name="numerator_orig" value="<%= @numerator %>">
+      <input type="hidden" name="denominator_orig" value="<%= @denominator %>">
       <input type="hidden" name="a" value="<%= @a %>">
       <input type="hidden" name="b" value="<%= @b %>">
-      <input type="hidden" name="numerator" value="<%= @numerator %>">
-      <input type="hidden" name="denominator" value="<%= @denominator %>">
     <% when 2 %>
-      <input type="text" name="answer" placeholder="čitatel/jmenovatel" required inputmode="text" autocomplete="off" spellcheck="false">
-      <input type="hidden" name="a" value="<%= @a %>">
-      <input type="hidden" name="b" value="<%= @b %>">
-      <input type="hidden" name="c" value="<%= @c %>">
-      <input type="hidden" name="d" value="<%= @d %>">
-      <input type="hidden" name="operation" value="<%= @operation %>">
+      <div class="fraction-input">
+        <input type="text" name="numerator" inputmode="numeric" placeholder="čitatel" required autocomplete="off">
+        <span>/</span>
+        <input type="text" name="denominator" inputmode="numeric" placeholder="jmenovatel" required autocomplete="off">
+      </div>
     <% when 3 %>
       <div class="radio-group">
         <label class="radio-option btn">
@@ -405,13 +427,14 @@ __END__
       <input type="hidden" name="c" value="<%= @c %>">
       <input type="hidden" name="d" value="<%= @d %>">
     <% when 4 %>
-      <input type="text" name="answer" placeholder="celé čitatel/jmenovatel" required inputmode="text" autocomplete="off" spellcheck="false">
-      <input type="hidden" name="a" value="<%= @a %>">
-      <input type="hidden" name="b" value="<%= @b %>">
+      <div class="mixed-number-input">
+        <input type="text" name="whole" inputmode="numeric" placeholder="celé číslo" required autocomplete="off">
+        <input type="text" name="numerator" inputmode="numeric" placeholder="čitatel" required autocomplete="off">
+        <span>/</span>
+        <input type="text" name="denominator" inputmode="numeric" placeholder="jmenovatel" required autocomplete="off">
+      </div>
     <% when 5 %>
-      <input type="text" name="answer" placeholder="desetinné číslo" required inputmode="decimal" autocomplete="off" spellcheck="false">
-      <input type="hidden" name="a" value="<%= @a %>">
-      <input type="hidden" name="b" value="<%= @b %>">
+      <input type="text" name="answer" inputmode="decimal" placeholder="desetinné číslo" required autocomplete="off">
     <% end %>
     <button type="submit" class="btn">Odpovědět</button>
   </form>
