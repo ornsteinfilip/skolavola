@@ -20,12 +20,23 @@ cat > /etc/nginx/sites-available/skolavola << 'EOL'
 server {
     listen 80;
     server_name skolavola.sinfin.io;
-
-    # Přidání location pro ACME challenge
+    
     location /.well-known/acme-challenge/ {
         root /home/skolavola/skolavola/certbot;
     }
-    
+
+    location / {
+        return 301 https://$server_name$request_uri;
+    }
+}
+
+server {
+    listen 443 ssl;
+    server_name skolavola.sinfin.io;
+
+    ssl_certificate /etc/letsencrypt/live/skolavola.sinfin.io/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/skolavola.sinfin.io/privkey.pem;
+
     location / {
         proxy_pass http://127.0.0.1:3000;
         proxy_set_header Host $host;
@@ -73,7 +84,9 @@ chmod 755 /home/$USER
 chmod 755 /home/$USER/skolavola
 
 # Získání SSL certifikátu
-certbot certonly --webroot -w /home/$USER/skolavola/certbot -d $DOMAIN --non-interactive --agree-tos --email webmaster@$DOMAIN
+if ! certbot certificates | grep -q "VALID: [1-9][0-9]*[[:space:]]*days"; then
+    certbot certonly --webroot -w /home/$USER/skolavola/certbot -d $DOMAIN --non-interactive --agree-tos --email webmaster@$DOMAIN
+fi
 
 # Restart služeb
 systemctl daemon-reload
