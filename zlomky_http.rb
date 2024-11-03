@@ -14,6 +14,8 @@ BIG_NUMBERS = (11..20).to_a
 set :public_folder, 'public'
 enable :sessions
 
+HALLOWEEN_MODE = true
+
 def gcd(a, b)
   b.zero? ? a : gcd(b, a % b)
 end
@@ -225,31 +227,58 @@ __END__
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Procvičování zlomků</title>
+  <title><%= HALLOWEEN_MODE ? "🎃 Strašidelné zlomky" : "Procvičování zlomků" %></title>
   <style>
+    :root {
+      <% if HALLOWEEN_MODE %>
+        --bg-color: #1a1a1a;
+        --text-color: #ff9800;
+        --container-bg: #2d2d2d;
+        --btn-bg: #ff5722;
+        --btn-hover: #f4511e;
+        --border-color: #ff9800;
+      <% else %>
+        --bg-color: #ffffff;
+        --text-color: #000000;
+        --container-bg: #f5f5f5;
+        --btn-bg: #007bff;
+        --btn-hover: #0056b3;
+        --border-color: #ddd;
+      <% end %>
+    }
+    
     body {
       font-family: Arial, sans-serif;
       max-width: 800px;
       margin: 0 auto;
       padding: 20px;
       line-height: 1.6;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      <%= "background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI1MCIgaGVpZ2h0PSI1MCI+PHRleHQ+8J+NqDwvdGV4dD48L3N2Zz4=');" if HALLOWEEN_MODE %>
     }
     .container {
-      background: #f5f5f5;
+      background: var(--container-bg);
       padding: 20px;
       border-radius: 8px;
       margin-top: 20px;
+      <%= "border: 2px solid var(--border-color);" if HALLOWEEN_MODE %>
+      <%= "box-shadow: 0 0 10px var(--border-color);" if HALLOWEEN_MODE %>
     }
     .btn {
       display: inline-block;
       padding: 10px 20px;
-      background: #007bff;
+      background: var(--btn-bg);
       color: white;
       text-decoration: none;
       border-radius: 5px;
       border: none;
       cursor: pointer;
       margin: 5px;
+    }
+    .btn:hover {
+      background: var(--btn-hover);
+      <%= "transform: scale(1.05);" if HALLOWEEN_MODE %>
     }
     .fraction {
       font-size: 24px;
@@ -293,7 +322,7 @@ __END__
 </html>
 
 @@ index
-<h1>Procvičování zlomků</h1>
+<h1><%= HALLOWEEN_MODE ? "🎃 Strašidelné zlomky 👻" : "Procvičování zlomků" %></h1>
 
 <div class="container">
   <h2>Vyber si typ úlohy:</h2>
@@ -311,15 +340,15 @@ __END__
   <h2>
     <% case @type %>
     <% when 1 %>
-      Krácení zlomků
+      <%= HALLOWEEN_MODE ? "🎃 Strašidelné krácení" : "Krácení zlomků" %>
     <% when 2 %>
-      Sčítání a odčítání zlomků
+      <%= HALLOWEEN_MODE ? "👻 Duchařské sčítání a odčítání" : "Sčítání a odčítání zlomků" %>
     <% when 3 %>
-      Porovnávání zlomků
+      <%= HALLOWEEN_MODE ? "🦇 Děsivé porovnávání" : "Porovnávání zlomků" %>
     <% when 4 %>
-      Převod na smíšená čísla
+      <%= HALLOWEEN_MODE ? "🕸️ Pavučinový převod" : "Převod na smíšená čísla" %>
     <% when 5 %>
-      Převod na desetinná čísla
+      <%= HALLOWEEN_MODE ? "💀 Kostlivý převod" : "Převod na desetinná čísla" %>
     <% end %>
   </h2>
   
