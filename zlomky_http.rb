@@ -573,7 +573,9 @@ __END__
 </div>
 
 <div class="container">
-  <a href="/" class="small-btn">Restart</a>
+  <a href="/" class="btn">
+    <%= HALLOWEEN_MODE ? "👻 Zabít test" : "Restart" %>
+  </a>
 </div>
 
 @@ result
