@@ -78,14 +78,14 @@
       <div class="exercise-answer">
         <% if @type == 1 %>
           <div class="fraction-input">
-            <input type="text" name="numerator" inputmode="numeric" placeholder="čitatel" required autocomplete="off" class="numerator">
+            <input type="text" name="numerator" inputmode="numeric" placeholder="čitatel" required autocomplete="off" class="numerator" autofocus>
             <input type="text" name="denominator" inputmode="numeric" placeholder="jmenovatel" required autocomplete="off" class="denominator">
           </div>
           <input type="hidden" name="numerator_orig" value="<%= @numerator %>">
           <input type="hidden" name="denominator_orig" value="<%= @denominator %>">
         <% elsif @type == 2 %>
           <div class="fraction-input">
-            <input type="text" name="numerator" inputmode="numeric" placeholder="čitatel" required autocomplete="off" class="numerator">
+            <input type="text" name="numerator" inputmode="numeric" placeholder="čitatel" required autocomplete="off" class="numerator" autofocus>
             <input type="text" name="denominator" inputmode="numeric" placeholder="jmenovatel" required autocomplete="off" class="denominator">
           </div>
           <input type="hidden" name="a" value="<%= @a %>">
@@ -113,7 +113,7 @@
             <div class="mixed-number-input">
               <input type="text" name="whole" inputmode="numeric" placeholder="celá část" required autocomplete="off">
               <div class="fraction-input">
-                <input type="text" name="numerator" inputmode="numeric" placeholder="čitatel" required autocomplete="off" class="numerator">
+                <input type="text" name="numerator" inputmode="numeric" placeholder="čitatel" required autocomplete="off" class="numerator" autofocus>
                 <input type="text" name="denominator" inputmode="numeric" placeholder="jmenovatel" required autocomplete="off" class="denominator">
               </div>
             </div>
