@@ -14,6 +14,15 @@ BIG_NUMBERS = (11..20).to_a
 set :public_folder, 'public'
 enable :sessions
 
+def gcd(a, b)
+  b.zero? ? a : gcd(b, a % b)
+end
+
+def reduce_fraction(numerator, denominator)
+  gcd = gcd(numerator.abs, denominator.abs)
+  [numerator/gcd, denominator/gcd]
+end
+
 get '/' do
   erb :index
 end
@@ -76,14 +85,15 @@ post '/check/:type' do |type|
       a = params[:a].to_i
       b = params[:b].to_i
       correct = (user_num.to_f/user_denom == a.to_f/b)
+      reduced_a, reduced_b = reduce_fraction(a, b)
       example = {
         question: "#{params[:numerator]}/#{params[:denominator]}",
         user_answer: params[:answer],
-        correct_answer: "#{a}/#{b}",
+        correct_answer: "#{reduced_a}/#{reduced_b}",
         correct: correct,
         fraction_value: a.to_f/b,
-        numerator: a,
-        denominator: b
+        numerator: reduced_a,
+        denominator: reduced_b
       }
     rescue
       correct = false
@@ -99,14 +109,15 @@ post '/check/:type' do |type|
       correct_num = operation == '+' ? (a*d + c*b) : (a*d - c*b)
       correct_denom = b*d
       correct = (user_num.to_f/user_denom == correct_num.to_f/correct_denom)
+      reduced_num, reduced_denom = reduce_fraction(correct_num, correct_denom)
       example = {
         question: "#{a}/#{b} #{operation} #{c}/#{d}",
         user_answer: params[:answer],
-        correct_answer: "#{correct_num}/#{correct_denom}",
+        correct_answer: "#{reduced_num}/#{reduced_denom}",
         correct: correct,
         fraction_value: correct_num.to_f/correct_denom,
-        numerator: correct_num,
-        denominator: correct_denom
+        numerator: reduced_num,
+        denominator: reduced_denom
       }
     rescue
       correct = false
