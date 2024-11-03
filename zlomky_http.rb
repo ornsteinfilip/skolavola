@@ -370,10 +370,6 @@ __END__
       margin: 20px 0;
     }
     
-    .exercise-problem {
-      flex: 0 0 auto;
-    }
-    
     .exercise-answer {
       flex: 1;
     }
@@ -499,6 +495,12 @@ __END__
           <input type="hidden" name="b" value="<%= @b %>">
           <input type="hidden" name="c" value="<%= @c %>">
           <input type="hidden" name="d" value="<%= @d %>">
+        <% when 4 %>
+          <div class="math-fraction large">
+            <span class="numerator"><%= @a %></span>
+            <span class="denominator"><%= @b %></span>
+          </div>
+          = 
         <% end %>
       </div>
 
@@ -532,6 +534,18 @@ __END__
               <input type="radio" name="answer" value=">" required>
               <span>&gt;</span>
             </label>
+          </div>
+        <% when 4 %>
+          <div class="exercise-answer">
+            <div class="mixed-number-input">
+              <input type="text" name="whole" inputmode="numeric" placeholder="celá část" required autocomplete="off">
+              <div class="fraction-input">
+                <input type="text" name="numerator" inputmode="numeric" placeholder="čitatel" required autocomplete="off" class="numerator">
+                <input type="text" name="denominator" inputmode="numeric" placeholder="jmenovatel" required autocomplete="off" class="denominator">
+              </div>
+            </div>
+            <input type="hidden" name="a" value="<%= @a %>">
+            <input type="hidden" name="b" value="<%= @b %>">
           </div>
         <% end %>
       </div>
