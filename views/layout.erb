@@ -198,9 +198,27 @@
       color: #666;
       margin-bottom: 1.5rem;
     }
+
+    .comparison-box {
+      display: inline-block;
+      width: 40px;
+      height: 40px;
+      border: 2px solid var(--text-color);
+      border-radius: 8px;
+      text-align: center;
+      line-height: 40px;
+      font-size: 24px;
+      margin: 0 10px;
+      background-color: var(--container-bg);
+    }
   </style>
 </head>
 <body>
   <%= yield %>
+  <script>
+  function updateComparisonSign(value) {
+    document.querySelector('.comparison-box').textContent = value;
+  }
+  </script>
 </body>
 </html> 
