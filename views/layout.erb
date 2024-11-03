@@ -36,10 +36,9 @@
     .container {
       background: var(--container-bg);
       padding: 20px;
+      margin-bottom: 20px;
       border-radius: 8px;
-      margin-top: 20px;
-      <%= "border: 2px solid var(--border-color);" if HALLOWEEN_MODE %>
-      <%= "box-shadow: 0 0 10px var(--border-color);" if HALLOWEEN_MODE %>
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
     .btn {
       display: inline-block;
@@ -211,6 +210,21 @@
       margin: 0 10px;
       background-color: var(--container-bg);
     }
+
+    .footer {
+      text-align: center;
+      margin-top: 20px;
+      padding: 10px;
+    }
+
+    .footer a {
+      color: var(--text-color);
+      text-decoration: none;
+    }
+
+    .footer a:hover {
+      text-decoration: underline;
+    }
   </style>
 </head>
 <body>
@@ -220,5 +234,8 @@
     document.querySelector('.comparison-box').textContent = value;
   }
   </script>
+  <div class="footer">
+    <a href="/">← Zpět na hlavní stránku</a>
+  </div>
 </body>
 </html> 
