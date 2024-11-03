@@ -333,6 +333,96 @@ __END__
     .mixed-number-input input:first-child {
       width: 60px;
     }
+    .math-fraction {
+      display: inline-flex;
+      flex-direction: column;
+      text-align: center;
+      vertical-align: middle;
+      margin: 0 5px;
+    }
+    
+    .math-fraction > span {
+      padding: 0 5px;
+    }
+    
+    .math-fraction .numerator {
+      border-bottom: 2px solid var(--text-color);
+      padding-bottom: 3px;
+    }
+    
+    .math-fraction .denominator {
+      padding-top: 3px;
+    }
+    
+    .math-fraction.large {
+      font-size: 24px;
+    }
+    
+    .fraction-operation {
+      margin: 0 10px;
+      font-size: 24px;
+    }
+    
+    .exercise-container {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      margin: 20px 0;
+    }
+    
+    .exercise-problem {
+      flex: 0 0 auto;
+    }
+    
+    .exercise-answer {
+      flex: 1;
+    }
+    
+    .fraction-input {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+    }
+    
+    .fraction-input input {
+      width: 80px;
+      text-align: center;
+    }
+    
+    .fraction-input .numerator {
+      border-bottom: 2px solid var(--text-color);
+      padding-bottom: 3px;
+    }
+    
+    .fraction-input .denominator {
+      padding-top: 3px;
+    }
+    
+    .fraction-line {
+      height: 2px;
+      background-color: var(--text-color);
+      width: 100%;
+    }
+    
+    .exercise-form {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+    
+    .exercise-content {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      width: 100%;
+    }
+    
+    .submit-button {
+      margin-top: 20px;
+      text-align: center;
+    }
   </style>
 </head>
 <body>
@@ -374,69 +464,82 @@ __END__
   <p>Příklad <%= @current + 1 %> z <%= session[:example_count] %></p>
   <p>Skóre: <%= @score %></p>
   
-  <div class="fraction">
-    <% case @type %>
-    <% when 1 %>
-      <%= @numerator %>/<%= @denominator %> = ?
-    <% when 2 %>
-      <%= @a %>/<%= @b %> <%= @operation %> <%= @c %>/<%= @d %> = ?
-    <% when 3 %>
-      <%= @a %>/<%= @b %> _ <%= @c %>/<%= @d %>
-    <% when 4 %>
-      <%= @a %>/<%= @b %> = ?
-    <% when 5 %>
-      <%= @a %>/<%= @b %> = ?
-    <% end %>
-  </div>
-  
-  <form action="/check/<%= @type %>" method="post">
-    <% case @type %>
-    <% when 1 %>
-      <div class="fraction-input">
-        <input type="text" name="numerator" inputmode="numeric" placeholder="čitatel" required autocomplete="off">
-        <span>/</span>
-        <input type="text" name="denominator" inputmode="numeric" placeholder="jmenovatel" required autocomplete="off">
+  <form action="/check/<%= @type %>" method="post" class="exercise-form">
+    <div class="exercise-content">
+      <div class="exercise-problem">
+        <% case @type %>
+        <% when 1 %>
+          <div class="math-fraction large">
+            <span class="numerator"><%= @numerator %></span>
+            <span class="denominator"><%= @denominator %></span>
+          </div>
+          = 
+        <% when 2 %>
+          <div class="math-fraction large">
+            <span class="numerator"><%= @a %></span>
+            <span class="denominator"><%= @b %></span>
+          </div>
+          <span class="fraction-operation"><%= @operation %></span>
+          <div class="math-fraction large">
+            <span class="numerator"><%= @c %></span>
+            <span class="denominator"><%= @d %></span>
+          </div>
+          = 
+        <% when 3 %>
+          <div class="math-fraction large">
+            <span class="numerator"><%= @a %></span>
+            <span class="denominator"><%= @b %></span>
+          </div>
+          _ 
+          <div class="math-fraction large">
+            <span class="numerator"><%= @c %></span>
+            <span class="denominator"><%= @d %></span>
+          </div>
+          <input type="hidden" name="a" value="<%= @a %>">
+          <input type="hidden" name="b" value="<%= @b %>">
+          <input type="hidden" name="c" value="<%= @c %>">
+          <input type="hidden" name="d" value="<%= @d %>">
+        <% end %>
       </div>
-      <input type="hidden" name="numerator_orig" value="<%= @numerator %>">
-      <input type="hidden" name="denominator_orig" value="<%= @denominator %>">
-      <input type="hidden" name="a" value="<%= @a %>">
-      <input type="hidden" name="b" value="<%= @b %>">
-    <% when 2 %>
-      <div class="fraction-input">
-        <input type="text" name="numerator" inputmode="numeric" placeholder="čitatel" required autocomplete="off">
-        <span>/</span>
-        <input type="text" name="denominator" inputmode="numeric" placeholder="jmenovatel" required autocomplete="off">
+
+      <div class="exercise-answer">
+        <% case @type %>
+        <% when 1 %>
+          <div class="fraction-input">
+            <input type="text" name="numerator" inputmode="numeric" placeholder="čitatel" required autocomplete="off" class="numerator">
+            <input type="text" name="denominator" inputmode="numeric" placeholder="jmenovatel" required autocomplete="off" class="denominator">
+          </div>
+          <input type="hidden" name="numerator_orig" value="<%= @numerator %>">
+          <input type="hidden" name="denominator_orig" value="<%= @denominator %>">
+          <input type="hidden" name="a" value="<%= @a %>">
+          <input type="hidden" name="b" value="<%= @b %>">
+        <% when 2 %>
+          <div class="fraction-input">
+            <input type="text" name="numerator" inputmode="numeric" placeholder="čitatel" required autocomplete="off" class="numerator">
+            <input type="text" name="denominator" inputmode="numeric" placeholder="jmenovatel" required autocomplete="off" class="denominator">
+          </div>
+        <% when 3 %>
+          <div class="radio-group">
+            <label class="radio-option btn">
+              <input type="radio" name="answer" value="<" required>
+              <span>&lt;</span>
+            </label>
+            <label class="radio-option btn">
+              <input type="radio" name="answer" value="=" required>
+              <span>=</span>
+            </label>
+            <label class="radio-option btn">
+              <input type="radio" name="answer" value=">" required>
+              <span>&gt;</span>
+            </label>
+          </div>
+        <% end %>
       </div>
-    <% when 3 %>
-      <div class="radio-group">
-        <label class="radio-option btn">
-          <input type="radio" name="answer" value="<" required>
-          <span>&lt;</span>
-        </label>
-        <label class="radio-option btn">
-          <input type="radio" name="answer" value="=" required>
-          <span>=</span>
-        </label>
-        <label class="radio-option btn">
-          <input type="radio" name="answer" value=">" required>
-          <span>&gt;</span>
-        </label>
-      </div>
-      <input type="hidden" name="a" value="<%= @a %>">
-      <input type="hidden" name="b" value="<%= @b %>">
-      <input type="hidden" name="c" value="<%= @c %>">
-      <input type="hidden" name="d" value="<%= @d %>">
-    <% when 4 %>
-      <div class="mixed-number-input">
-        <input type="text" name="whole" inputmode="numeric" placeholder="celé číslo" required autocomplete="off">
-        <input type="text" name="numerator" inputmode="numeric" placeholder="čitatel" required autocomplete="off">
-        <span>/</span>
-        <input type="text" name="denominator" inputmode="numeric" placeholder="jmenovatel" required autocomplete="off">
-      </div>
-    <% when 5 %>
-      <input type="text" name="answer" inputmode="decimal" placeholder="desetinné číslo" required autocomplete="off">
-    <% end %>
-    <button type="submit" class="btn">Odpovědět</button>
+    </div>
+    
+    <div class="submit-button">
+      <button type="submit" class="btn">Odpovědět</button>
+    </div>
   </form>
 </div>
 
