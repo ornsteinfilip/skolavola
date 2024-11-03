@@ -32,7 +32,7 @@ class ZlomkyApp < Sinatra::Base
 
   post '/start' do
     session[:score] = 0
-    session[:example_count] = 1
+    session[:example_count] = 10
     session[:start_time] = Time.now
     session[:current_example] = 0
     session[:examples] = []
