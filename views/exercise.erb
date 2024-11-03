@@ -43,6 +43,11 @@
             <span class="numerator"><%= @c %></span>
             <span class="denominator"><%= @d %></span>
           </div>
+          
+          <input type="hidden" name="a" value="<%= @a %>">
+          <input type="hidden" name="b" value="<%= @b %>">
+          <input type="hidden" name="c" value="<%= @c %>">
+          <input type="hidden" name="d" value="<%= @d %>">
         <% elsif @type == 4 %>
           <div class="math-fraction large">
             <span class="numerator"><%= @a %></span>
