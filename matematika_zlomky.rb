@@ -106,8 +106,16 @@ module MatematikaZlomky
           @c = NUMBERS.sample
           @d = NUMBERS.sample
         when 4
-          @a = BIG_NUMBERS.sample
-          @b = NUMBERS.sample
+          # Generujeme čísla tak, aby zbytek po dělení nebyl 0
+          loop do
+            @a = BIG_NUMBERS.sample  # čitatel (11-20)
+            @b = NUMBERS.sample      # jmenovatel (2-10)
+            
+            # Pokračuj v generování, pokud by byl zbytek 0
+            next if (@a % @b) == 0
+            
+            break
+          end
         when 5
           @a = NUMBERS.sample
           @b = NUMBERS.sample
