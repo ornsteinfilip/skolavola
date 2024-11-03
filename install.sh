@@ -84,7 +84,7 @@ chmod 755 /home/$USER
 chmod 755 /home/$USER/skolavola
 
 # Získání SSL certifikátu
-if ! certbot certificates | grep -q "VALID: [1-9][0-9]*[[:space:]]*days"; then
+if [ ! -f "/etc/letsencrypt/live/$DOMAIN/fullchain.pem" ] || [ $(find "/etc/letsencrypt/live/$DOMAIN/fullchain.pem" -mtime +90) ]; then
     certbot certonly --webroot -w /home/$USER/skolavola/certbot -d $DOMAIN --non-interactive --agree-tos --email webmaster@$DOMAIN
 fi
 
