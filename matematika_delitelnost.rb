@@ -47,8 +47,16 @@ module MatematikaDelitelnost
         
         case @type
         when 1 # NSD
-          @a = NUMBERS.sample
-          @b = NUMBERS.sample
+          if rand < 0.7  # 70% šance na čísla se společným dělitelem větším než 1
+            base = NUMBERS.sample
+            multiplier1 = (2..4).to_a.sample
+            multiplier2 = (2..4).to_a.sample
+            @a = base * multiplier1
+            @b = base * multiplier2
+          else  # 30% šance na náhodná čísla
+            @a = NUMBERS.sample
+            @b = NUMBERS.sample
+          end
         when 2 # NSN
           @a = NUMBERS.sample
           @b = NUMBERS.sample
