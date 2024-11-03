@@ -24,6 +24,42 @@ module MatematikaZlomky
       [numerator/gcd, denominator/gcd]
     end
 
+    def fraction_to_s(rational)
+      "#{rational.numerator}/#{rational.denominator}"
+    end
+
+    def generate_addition_subtraction
+      operation = [:+, :-].sample
+      
+      loop do
+        # Generování prvního zlomku
+        a = rand(1..10)
+        b = rand(1..10)
+        first = Rational(a, b)
+        
+        # Generování druhého zlomku
+        c = rand(1..10)
+        d = rand(1..10)
+        second = Rational(c, d)
+        
+        # Vypočítáme výsledek
+        result = operation == :+ ? first + second : first - second
+        
+        # Pokud je výsledek záporný, pokračujeme v generování
+        next if result < 0
+        
+        return {
+          a: a,
+          b: b,
+          c: c,
+          d: d,
+          operation: operation == :+ ? '+' : '-',
+          result: result,
+          question: "#{fraction_to_s(first)} #{operation} #{fraction_to_s(second)} = "
+        }
+      end
+    end
+
     get '/' do
       @title = "Zlomky"
       erb :index
@@ -56,11 +92,14 @@ module MatematikaZlomky
           @numerator = @a * multiplier
           @denominator = @b * multiplier
         when 2
-          @a = NUMBERS.sample
-          @b = NUMBERS.sample
-          @c = NUMBERS.sample
-          @d = NUMBERS.sample
-          @operation = ['+', '-'].sample
+          example_data = generate_addition_subtraction
+          session[:example_data] = example_data
+          @a = example_data[:a]
+          @b = example_data[:b]
+          @c = example_data[:c]
+          @d = example_data[:d]
+          @operation = example_data[:operation]
+          @question = example_data[:question]
         when 3
           @a = NUMBERS.sample
           @b = NUMBERS.sample
@@ -118,14 +157,12 @@ module MatematikaZlomky
         begin
           user_num = params[:numerator].to_i
           user_denom = params[:denominator].to_i
-          a = params[:a].to_i
-          b = params[:b].to_i
-          c = params[:c].to_i
-          d = params[:d].to_i
-          operation = params[:operation]
+          example_data = session[:example_data]
           
-          correct_num = operation == '+' ? (a*d + c*b) : (a*d - c*b)
-          correct_denom = b*d
+          correct_num = example_data[:operation] == '+' ? 
+            (example_data[:a]*example_data[:d] + example_data[:c]*example_data[:b]) : 
+            (example_data[:a]*example_data[:d] - example_data[:c]*example_data[:b])
+          correct_denom = example_data[:b]*example_data[:d]
           
           reduced_user = reduce_fraction(user_num, user_denom)
           reduced_correct = reduce_fraction(correct_num, correct_denom)
@@ -133,7 +170,7 @@ module MatematikaZlomky
           
           reduced_num, reduced_denom = reduce_fraction(correct_num, correct_denom)
           example = {
-            question: "#{a}/#{b} #{operation} #{c}/#{d}",
+            question: example_data[:question],
             user_answer: "#{user_num}/#{user_denom}",
             correct_answer: "#{reduced_num}/#{reduced_denom}",
             correct: correct,
@@ -144,7 +181,7 @@ module MatematikaZlomky
         rescue => e
           correct = false
           example = {
-            question: "#{params[:a]}/#{params[:b]} #{params[:operation]} #{params[:c]}/#{params[:d]}",
+            question: session[:example_data][:question],
             user_answer: "#{params[:numerator]}/#{params[:denominator]}",
             correct_answer: "chyba výpočtu",
             correct: false
