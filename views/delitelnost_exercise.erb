@@ -1,0 +1,49 @@
+<div class="container">
+  <h2>
+    <% title = case @type 
+        when 1 then HALLOWEEN_MODE ? "🎃 Strašidelný NSD" : "Největší společný dělitel"
+        when 2 then HALLOWEEN_MODE ? "👻 Duchařský NSN" : "Nejmenší společný násobek"
+        end %>
+    <%= title %>
+  </h2>
+
+  <% instructions = case @type
+      when 1 then "Najdi největší společný dělitel čísel."
+      when 2 then "Najdi nejmenší společný násobek čísel."
+      end %>
+  <p class="instructions"><%= instructions %></p>
+
+  <% explanation = case @type
+      when 1 then "NSD najdeš tak, že vypíšeš všechny dělitele obou čísel a vybereš největší společný."
+      when 2 then "NSN najdeš tak, že vypíšeš násobky menšího čísla, dokud nenajdeš první společný násobek s druhým číslem."
+      end %>
+  <p class="explanation"><%= explanation %></p>
+
+  <p>Příklad <%= @current + 1 %> z <%= session[:example_count] %></p>
+  <p>Skóre: <%= @score %></p>
+  
+  <form action="<%= url_prefix %>/check/<%= @type %>" method="post" class="exercise-form">
+    <div class="exercise-content">
+      <div class="exercise-problem">
+        <% if @type == 1 %>
+          NSD(<%= @a %>, <%= @b %>) = 
+        <% elsif @type == 2 %>
+          NSN(<%= @a %>, <%= @b %>) = 
+        <% end %>
+        <input type="text" name="answer" inputmode="numeric" required autocomplete="off" autofocus>
+        <input type="hidden" name="a" value="<%= @a %>">
+        <input type="hidden" name="b" value="<%= @b %>">
+      </div>
+    </div>
+    
+    <div class="submit-button">
+      <button type="submit" class="btn">Odpovědět</button>
+    </div>
+  </form>
+</div>
+
+<div class="container">
+  <a href="<%= url_prefix %>/" class="btn">
+    <%= HALLOWEEN_MODE ? "👻 Zabít test" : "Restart" %>
+  </a>
+</div> 

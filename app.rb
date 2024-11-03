@@ -4,6 +4,7 @@ require 'sinatra/base'
 require 'erb'
 require_relative 'lib/constants'
 require_relative 'matematika_zlomky'
+require_relative 'matematika_delitelnost'
 
 include Constants  # Přesunuto na globální úroveň
 

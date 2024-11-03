@@ -1,0 +1,9 @@
+<h1><%= HALLOWEEN_MODE ? "🎃 Strašidelná dělitelnost 👻" : "Procvičování dělitelnosti" %></h1>
+
+<div class="container">
+  <h2>Vyber si typ úlohy:</h2>
+  <form action="<%= url_prefix %>/start" method="post">
+    <button class="btn" name="choice" value="1">1 - Největší společný dělitel (NSD)</button>
+    <button class="btn" name="choice" value="2">2 - Nejmenší společný násobek (NSN)</button>
+  </form>
+</div> 
