@@ -72,16 +72,25 @@ WantedBy=multi-user.target
 EOL
 
 # Vytvoření adresáře pro certbot a nastavení oprávnění
-mkdir -p /home/$USER/skolavola/certbot
-chown -R www-data:www-data /home/$USER/skolavola/certbot
-chmod -R 755 /home/$USER/skolavola/certbot
+if [ ! -d "/home/$USER/skolavola/certbot" ]; then
+    mkdir -p /home/$USER/skolavola/certbot
+    chown -R www-data:www-data /home/$USER/skolavola/certbot
+    chmod -R 755 /home/$USER/skolavola/certbot
+fi
 
 # Pro jistotu přidáme uživatele www-data do skupiny skolavola
-usermod -a -G $USER www-data
+if ! groups www-data | grep -q "$USER"; then
+    usermod -a -G $USER www-data
+fi
 
 # Nastavíme skupinová oprávnění pro nadřazené adresáře
-chmod 755 /home/$USER
-chmod 755 /home/$USER/skolavola
+if [ "$(stat -c %a /home/$USER)" != "755" ]; then
+    chmod 755 /home/$USER
+fi
+
+if [ "$(stat -c %a /home/$USER/skolavola)" != "755" ]; then
+    chmod 755 /home/$USER/skolavola
+fi
 
 # Získání SSL certifikátu
 if [ ! -f "/etc/letsencrypt/live/$DOMAIN/fullchain.pem" ] || [ $(find "/etc/letsencrypt/live/$DOMAIN/fullchain.pem" -mtime +90) ]; then
