@@ -547,6 +547,21 @@ __END__
             <input type="hidden" name="a" value="<%= @a %>">
             <input type="hidden" name="b" value="<%= @b %>">
           </div>
+        <% when 5 %>
+          <div class="exercise-content">
+            <div class="exercise-problem">
+              <div class="math-fraction large">
+                <span class="numerator"><%= @a %></span>
+                <span class="denominator"><%= @b %></span>
+              </div>
+              = 
+            </div>
+            <div class="exercise-answer">
+              <input type="text" name="answer" inputmode="decimal" placeholder="desetinné číslo" required autocomplete="off">
+              <input type="hidden" name="a" value="<%= @a %>">
+              <input type="hidden" name="b" value="<%= @b %>">
+            </div>
+          </div>
         <% end %>
       </div>
     </div>
