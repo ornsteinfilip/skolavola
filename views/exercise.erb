@@ -65,6 +65,11 @@
             <input type="text" name="numerator" inputmode="numeric" placeholder="čitatel" required autocomplete="off" class="numerator">
             <input type="text" name="denominator" inputmode="numeric" placeholder="jmenovatel" required autocomplete="off" class="denominator">
           </div>
+          <input type="hidden" name="a" value="<%= @a %>">
+          <input type="hidden" name="b" value="<%= @b %>">
+          <input type="hidden" name="c" value="<%= @c %>">
+          <input type="hidden" name="d" value="<%= @d %>">
+          <input type="hidden" name="operation" value="<%= @operation %>">
         <% elsif @type == 3 %>
           <div class="radio-group" style="margin-top: 20px;">
             <label class="radio-option btn">

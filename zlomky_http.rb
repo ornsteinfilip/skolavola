@@ -117,27 +117,39 @@ class ZlomkyApp < Sinatra::Base
       end
     when 2
       begin
-        user_num, user_denom = params[:answer].split('/').map(&:to_i)
+        user_num = params[:numerator].to_i
+        user_denom = params[:denominator].to_i
         a = params[:a].to_i
         b = params[:b].to_i
         c = params[:c].to_i
         d = params[:d].to_i
         operation = params[:operation]
+        
         correct_num = operation == '+' ? (a*d + c*b) : (a*d - c*b)
         correct_denom = b*d
-        correct = (user_num.to_f/user_denom == correct_num.to_f/correct_denom)
+        
+        reduced_user = reduce_fraction(user_num, user_denom)
+        reduced_correct = reduce_fraction(correct_num, correct_denom)
+        correct = (reduced_user == reduced_correct)
+        
         reduced_num, reduced_denom = reduce_fraction(correct_num, correct_denom)
         example = {
           question: "#{a}/#{b} #{operation} #{c}/#{d}",
-          user_answer: params[:answer],
+          user_answer: "#{user_num}/#{user_denom}",
           correct_answer: "#{reduced_num}/#{reduced_denom}",
           correct: correct,
           fraction_value: correct_num.to_f/correct_denom,
           numerator: reduced_num,
           denominator: reduced_denom
         }
-      rescue
+      rescue => e
         correct = false
+        example = {
+          question: "#{params[:a]}/#{params[:b]} #{params[:operation]} #{params[:c]}/#{params[:d]}",
+          user_answer: "#{params[:numerator]}/#{params[:denominator]}",
+          correct_answer: "chyba výpočtu",
+          correct: false
+        }
       end
     when 3
       answer = params[:answer]
@@ -213,25 +225,46 @@ class ZlomkyApp < Sinatra::Base
   end
 
   get '/result' do
-    @score = session[:score]
-    @example_count = session[:example_count]
-    duration = (Time.now - session[:start_time])/@example_count
-    @duration = duration.to_i
-    @examples = session[:examples]
-    
-    @grade = @example_count - @score + 1
-    @grade = 5 if @grade > 5
-    
-    @score_cz = case @score
-    when 1
-      'bod'
-    when 2..4
-      'body'
-    else
-      'bodů'
+    begin
+      # Kontrola existence session proměnných
+      redirect '/' unless session[:score] && session[:example_count] && session[:start_time]
+      
+      @score = session[:score]
+      @example_count = session[:example_count]
+      
+      # Ošetření výpočtu duration
+      if session[:start_time]
+        duration = (Time.now - session[:start_time])/@example_count
+        @duration = duration.to_i
+      else
+        @duration = 0
+      end
+      
+      @examples = session[:examples] || []
+      
+      # Ošetření výpočtu známky
+      @grade = if @score && @example_count
+        grade = @example_count - @score + 1
+        [grade, 5].min  # Omezení na maximum 5
+      else
+        5
+      end
+      
+      @score_cz = case @score
+      when 1
+        'bod'
+      when 2..4
+        'body'
+      else
+        'bodů'
+      end
+      
+      erb :result
+    rescue => e
+      puts "Chyba při zobrazení výsledků: #{e.message}"
+      puts e.backtrace
+      redirect '/'
     end
-    
-    erb :result
   end
 
   run! if app_file == $0
