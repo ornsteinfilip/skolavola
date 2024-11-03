@@ -9,7 +9,25 @@
         end %>
     <%= title %>
   </h2>
-  
+
+  <% instructions = case @type
+      when 1 then "Zkrať zlomek na základní tvar."
+      when 2 then "Vypočítej příklad a výsledek zapiš jako zlomek v základním tvaru."
+      when 3 then "Porovnej zlomky pomocí znamének <, > nebo =."
+      when 4 then "Převeď zlomek na smíšené číslo."
+      when 5 then "Převeď zlomek na desetinné číslo."
+      end %>
+  <p class="instructions"><%= instructions %></p>
+
+  <% explanation = case @type
+      when 1 then "Zlomek krátíme tak, že čitatele i jmenovatele dělíme jejich největším společným dělitelem."
+      when 2 then "Při sčítání a odčítání zlomků musíme nejprve převést zlomky na společného jmenovatele. Poté sečteme nebo odečteme čitatele a výsledek zkrátíme."
+      when 3 then "Pro porovnání zlomků je nejlepší převést je na společného jmenovatele. Pak stačí porovnat čitatele."
+      when 4 then "Při převodu na smíšené číslo vydělíme čitatele jmenovatelem. Celá část je výsledek dělení, zbytek po dělení je čitatel nového zlomku."
+      when 5 then "Pro převod na desetinné číslo vydělíme čitatele jmenovatelem."
+      end %>
+  <p class="explanation"><%= explanation %></p>
+
   <p>Příklad <%= @current + 1 %> z <%= session[:example_count] %></p>
   <p>Skóre: <%= @score %></p>
   
