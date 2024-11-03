@@ -62,8 +62,15 @@ EOL
 
 # Vytvoření adresáře pro certbot a nastavení oprávnění
 mkdir -p /home/$USER/skolavola/certbot
-chown -R $USER:$USER /home/$USER/skolavola
+chown -R www-data:www-data /home/$USER/skolavola/certbot
 chmod -R 755 /home/$USER/skolavola/certbot
+
+# Pro jistotu přidáme uživatele www-data do skupiny skolavola
+usermod -a -G $USER www-data
+
+# Nastavíme skupinová oprávnění pro nadřazené adresáře
+chmod 755 /home/$USER
+chmod 755 /home/$USER/skolavola
 
 # Získání SSL certifikátu
 certbot certonly --webroot -w /home/$USER/skolavola/certbot -d $DOMAIN --non-interactive --agree-tos --email webmaster@$DOMAIN --dry-run
