@@ -256,23 +256,6 @@ __END__
     .incorrect {
       color: red;
     }
-    .pie-chart {
-      width: 200px;
-      height: 200px;
-      border-radius: 50%;
-      background: #eee;
-      position: relative;
-      margin: 20px auto;
-    }
-    .pie-segment {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      border-radius: 50%;
-      clip: rect(0, 200px, 200px, 100px);
-      background: #007bff;
-      transform-origin: 50% 50%;
-    }
     .radio-group {
       display: flex;
       gap: 20px;
@@ -407,16 +390,6 @@ __END__
         Správná odpověď: <%= example[:correct_answer] %><br>
         <%= example[:correct] ? '✓ Správně' : '✗ Špatně' %>
       </p>
-      
-      <% if example[:numerator] && example[:denominator] && !example[:question].include?('_') %>
-        <div class="pie-chart">
-          <% segments = example[:denominator] %>
-          <% filled = example[:numerator] %>
-          <% (0...filled).each do |i| %>
-            <div class="pie-segment" style="transform: rotate(<%= i * (360.0/segments) %>deg)"></div>
-          <% end %>
-        </div>
-      <% end %>
     </div>
   <% end %>
   
