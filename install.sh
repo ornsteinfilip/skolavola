@@ -20,23 +20,12 @@ cat > /etc/nginx/sites-available/skolavola << 'EOL'
 server {
     listen 80;
     server_name skolavola.sinfin.io;
-    
-    location / {
-        return 301 https://$server_name$request_uri;
+
+    # Přidání location pro ACME challenge
+    location /.well-known/acme-challenge/ {
+        root /home/skolavola/skolavola/certbot;
     }
-}
-
-server {
-    listen 443 ssl;
-    server_name skolavola.sinfin.io;
-
-    ssl_certificate /etc/letsencrypt/live/skolavola.cz/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/skolavola.cz/privkey.pem;
-
-    ssl_protocols TLSv1.2 TLSv1.3;
-    ssl_prefer_server_ciphers on;
-    ssl_ciphers ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384;
-
+    
     location / {
         proxy_pass http://127.0.0.1:3000;
         proxy_set_header Host $host;
@@ -45,6 +34,8 @@ server {
         proxy_set_header X-Forwarded-Proto $scheme;
     }
 }
+
+
 EOL
 
 # Vytvoření symbolického odkazu
@@ -70,7 +61,7 @@ WantedBy=multi-user.target
 EOL
 
 # Získání SSL certifikátu
-certbot --nginx -d $DOMAIN --non-interactive --agree-tos --email webmaster@$DOMAIN
+certbot certonly --webroot -w /home/skolavola/skolavola/certbot -d $DOMAIN --non-interactive --agree-tos --email webmaster@$DOMAIN
 
 # Restart služeb
 systemctl daemon-reload
