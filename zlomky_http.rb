@@ -2,8 +2,8 @@
 # 1. Nainstaluj Ruby (https://www.ruby-lang.org/en/downloads/)
 # 2. Nainstaluj gem Sinatra: gem install sinatra
 # 3. Ulož tento soubor jako zlomky_http.rb
-# 4. Spusť příkazem: ruby zlomky_http.rb
-# 5. Otevři v prohlížeči http://localhost:4567
+# 4. Spusť příkazem: ruby zlomky_http.rb -o 0.0.0.0
+# 5. Otevři v prohlížeči http://localhost:4567 nebo http://[IP adresa]:4567
 
 require 'sinatra'
 require 'erb'
@@ -358,14 +358,17 @@ __END__
       <input type="hidden" name="operation" value="<%= @operation %>">
     <% when 3 %>
       <div class="radio-group">
-        <label class="radio-option">
-          <input type="radio" name="answer" value="<" required> <
+        <label class="radio-option btn">
+          <input type="radio" name="answer" value="<" required>
+          <span>&lt;</span>
         </label>
-        <label class="radio-option">
-          <input type="radio" name="answer" value="=" required> =
+        <label class="radio-option btn">
+          <input type="radio" name="answer" value="=" required>
+          <span>=</span>
         </label>
-        <label class="radio-option">
-          <input type="radio" name="answer" value=">" required> >
+        <label class="radio-option btn">
+          <input type="radio" name="answer" value=">" required>
+          <span>&gt;</span>
         </label>
       </div>
       <input type="hidden" name="a" value="<%= @a %>">
@@ -383,6 +386,10 @@ __END__
     <% end %>
     <button type="submit" class="btn">Odpovědět</button>
   </form>
+</div>
+
+<div class="container">
+  <a href="/" class="small-btn">Restart</a>
 </div>
 
 @@ result
