@@ -1,0 +1,124 @@
+<div class="container">
+  <h2>
+    <% title = case @type 
+        when 1 then HALLOWEEN_MODE ? "🎃 Strašidelné krácení" : "Krácení zlomků"
+        when 2 then HALLOWEEN_MODE ? "👻 Duchařské sčítání a odčítání" : "Sčítání a odčítání zlomků"
+        when 3 then HALLOWEEN_MODE ? "🦇 Děsivé porovnávání" : "Porovnávání zlomků"
+        when 4 then HALLOWEEN_MODE ? "🕸️ Pavučinový převod" : "Převod na smíšená čísla"
+        when 5 then HALLOWEEN_MODE ? "💀 Kostlivý převod" : "Převod na desetinná čísla"
+        end %>
+    <%= title %>
+  </h2>
+  
+  <p>Příklad <%= @current + 1 %> z <%= session[:example_count] %></p>
+  <p>Skóre: <%= @score %></p>
+  
+  <form action="/check/<%= @type %>" method="post" class="exercise-form">
+    <div class="exercise-content">
+      <div class="exercise-problem">
+        <% if @type == 1 %>
+          <div class="math-fraction large">
+            <span class="numerator"><%= @numerator %></span>
+            <span class="denominator"><%= @denominator %></span>
+          </div>
+          = 
+        <% elsif @type == 2 %>
+          <div class="math-fraction large">
+            <span class="numerator"><%= @a %></span>
+            <span class="denominator"><%= @b %></span>
+          </div>
+          <span class="fraction-operation"><%= @operation %></span>
+          <div class="math-fraction large">
+            <span class="numerator"><%= @c %></span>
+            <span class="denominator"><%= @d %></span>
+          </div>
+          = 
+        <% elsif @type == 3 %>
+          <div class="math-fraction large">
+            <span class="numerator"><%= @a %></span>
+            <span class="denominator"><%= @b %></span>
+          </div>
+          _ 
+          <div class="math-fraction large">
+            <span class="numerator"><%= @c %></span>
+            <span class="denominator"><%= @d %></span>
+          </div>
+        <% elsif @type == 4 %>
+          <div class="math-fraction large">
+            <span class="numerator"><%= @a %></span>
+            <span class="denominator"><%= @b %></span>
+          </div>
+          = 
+        <% end %>
+      </div>
+
+      <div class="exercise-answer">
+        <% if @type == 1 %>
+          <div class="fraction-input">
+            <input type="text" name="numerator" inputmode="numeric" placeholder="čitatel" required autocomplete="off" class="numerator">
+            <input type="text" name="denominator" inputmode="numeric" placeholder="jmenovatel" required autocomplete="off" class="denominator">
+          </div>
+          <input type="hidden" name="numerator_orig" value="<%= @numerator %>">
+          <input type="hidden" name="denominator_orig" value="<%= @denominator %>">
+        <% elsif @type == 2 %>
+          <div class="fraction-input">
+            <input type="text" name="numerator" inputmode="numeric" placeholder="čitatel" required autocomplete="off" class="numerator">
+            <input type="text" name="denominator" inputmode="numeric" placeholder="jmenovatel" required autocomplete="off" class="denominator">
+          </div>
+        <% elsif @type == 3 %>
+          <div class="radio-group" style="margin-top: 20px;">
+            <label class="radio-option btn">
+              <input type="radio" name="answer" value="<" required>
+              <span>&lt;</span>
+            </label>
+            <label class="radio-option btn">
+              <input type="radio" name="answer" value="=" required>
+              <span>=</span>
+            </label>
+            <label class="radio-option btn">
+              <input type="radio" name="answer" value=">" required>
+              <span>&gt;</span>
+            </label>
+          </div>
+        <% elsif @type == 4 %>
+          <div class="exercise-answer">
+            <div class="mixed-number-input">
+              <input type="text" name="whole" inputmode="numeric" placeholder="celá část" required autocomplete="off">
+              <div class="fraction-input">
+                <input type="text" name="numerator" inputmode="numeric" placeholder="čitatel" required autocomplete="off" class="numerator">
+                <input type="text" name="denominator" inputmode="numeric" placeholder="jmenovatel" required autocomplete="off" class="denominator">
+              </div>
+            </div>
+            <input type="hidden" name="a" value="<%= @a %>">
+            <input type="hidden" name="b" value="<%= @b %>">
+          </div>
+        <% elsif @type == 5 %>
+          <div class="exercise-content">
+            <div class="exercise-problem">
+              <div class="math-fraction large">
+                <span class="numerator"><%= @a %></span>
+                <span class="denominator"><%= @b %></span>
+              </div>
+              = 
+            </div>
+            <div class="exercise-answer">
+              <input type="text" name="answer" inputmode="decimal" placeholder="desetinné číslo" required autocomplete="off">
+              <input type="hidden" name="a" value="<%= @a %>">
+              <input type="hidden" name="b" value="<%= @b %>">
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+    
+    <div class="submit-button">
+      <button type="submit" class="btn">Odpovědět</button>
+    </div>
+  </form>
+</div>
+
+<div class="container">
+  <a href="/" class="btn">
+    <%= HALLOWEEN_MODE ? "👻 Zabít test" : "Restart" %>
+  </a>
+</div> 

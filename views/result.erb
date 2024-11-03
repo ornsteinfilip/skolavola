@@ -1,0 +1,20 @@
+<div class="container">
+  <h2>Výsledky</h2>
+  <p>Získal/a jsi <%= @score %> <%= @score_cz %> z <%= @example_count %>.</p>
+  <p>Jeden příklad ti průměrně trval <%= @duration %> vteřin(y).</p>
+  <p>Máš to za <%= @grade %>.</p>
+  
+  <h3>Přehled příkladů:</h3>
+  <% @examples.each_with_index do |example, index| %>
+    <div class="<%= example[:correct] ? 'correct' : 'incorrect' %>">
+      <p>
+        Příklad <%= index + 1 %>: <%= example[:question] %><br>
+        Tvoje odpověď: <%= example[:user_answer] %><br>
+        Správná odpověď: <%= example[:correct_answer] %><br>
+        <%= example[:correct] ? '✓ Správně' : '✗ Špatně' %>
+      </p>
+    </div>
+  <% end %>
+  
+  <a href="/" class="btn">Zpět na začátek</a>
+</div> 

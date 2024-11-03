@@ -1,0 +1,12 @@
+<h1><%= HALLOWEEN_MODE ? "🎃 Strašidelné zlomky 👻" : "Procvičování zlomků" %></h1>
+
+<div class="container">
+  <h2>Vyber si typ úlohy:</h2>
+  <form action="/start" method="post">
+    <button class="btn" name="choice" value="1">1 - Krácení zlomků</button>
+    <button class="btn" name="choice" value="2">2 - Sčítání a odčítání zlomků</button>
+    <button class="btn" name="choice" value="3">3 - Porovnávání zlomků</button>
+    <button class="btn" name="choice" value="4">4 - Převod na smíšená čísla</button>
+    <button class="btn" name="choice" value="5">5 - Převod na desetinná čísla</button>
+  </form>
+</div> 
