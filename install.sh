@@ -73,7 +73,7 @@ chmod 755 /home/$USER
 chmod 755 /home/$USER/skolavola
 
 # Získání SSL certifikátu
-certbot certonly --webroot -w /home/$USER/skolavola/certbot -d $DOMAIN --non-interactive --agree-tos --email webmaster@$DOMAIN --dry-run
+certbot certonly --webroot -w /home/$USER/skolavola/certbot -d $DOMAIN --non-interactive --agree-tos --email webmaster@$DOMAIN
 
 # Restart služeb
 systemctl daemon-reload
