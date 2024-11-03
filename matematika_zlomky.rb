@@ -231,14 +231,16 @@ module MatematikaZlomky
         end
       when 5
         begin
+          # Přijmeme jak čárku, tak tečku
           user_decimal = params[:answer].gsub(',', '.').to_f
           a = params[:a].to_i
           b = params[:b].to_i
-          correct = (user_decimal == (a.to_f/b).round(2))
+          correct_result = (a.to_f/b).round(2)
+          correct = (user_decimal == correct_result)
           example = {
             question: "#{a}/#{b}",
             user_answer: params[:answer],
-            correct_answer: (a.to_f/b).round(2).to_s,
+            correct_answer: correct_result.to_s.gsub('.', ','), # Zobrazíme s čárkou
             correct: correct,
             fraction_value: a.to_f/b,
             numerator: a,
