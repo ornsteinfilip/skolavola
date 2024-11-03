@@ -71,6 +71,9 @@ User=skolavola
 WorkingDirectory=/home/skolavola/skolavola
 ExecStart=/home/skolavola/.local/share/gem/ruby/3.1.0/bin/bundle exec rackup
 Restart=always
+RestartSec=1
+TimeoutStartSec=10
+TimeoutStopSec=10
 Environment=RACK_ENV=production
 
 [Install]
